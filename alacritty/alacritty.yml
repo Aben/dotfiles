@@ -90,53 +90,53 @@ window:
 # Font configuration
 font:
   # Normal (roman) font face
-  #normal:
+  normal:
     # Font family
     #
     # Default:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    #family: monospace
+    family: Go Mono
 
     # The `style` can be specified to pick a specific face.
-    #style: Regular
+    style: Regular
 
   # Bold font face
-  #bold:
+  bold:
     # Font family
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    #family: monospace
+    family: Go Mono
 
     # The `style` can be specified to pick a specific face.
-    #style: Bold
+    style: Bold
 
   # Italic font face
-  #italic:
+  italic:
     # Font family
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    #family: monospace
+    family: Go Mono
 
     # The `style` can be specified to pick a specific face.
-    #style: Italic
+    style: Italic
 
   # Bold italic font face
-  #bold_italic:
+  bold_italic:
     # Font family
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    #family: monospace
+    family: Go Mono
 
     # The `style` can be specified to pick a specific face.
-    #style: Bold Italic
+    style: Bold Italic
 
   # Point size
-  size: 16.5
+  size: 16
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -500,7 +500,7 @@ working_directory: None
 #
 # If the same trigger is assigned to multiple actions, all of them are executed
 # at once.
-#key_bindings:
+key_bindings:
   # (Windows, Linux, and BSD only)
   #- { key: V,        mods: Control|Shift, action: Paste            }
   #- { key: C,        mods: Control|Shift, action: Copy             }
@@ -528,6 +528,25 @@ working_directory: None
   #- { key: Q,      mods: Command,         action: Quit             }
   #- { key: W,      mods: Command,         action: Quit             }
   #- { key: F,      mods: Command|Control, action: ToggleFullscreen }
+  # Work around for CTRL-q
+  # https://github.com/jwilm/alacritty/issues/1359
+  - { key: Q,       mods: Control,         chars: "\x11"            }
+  # Work around for meta
+  # https://github.com/jwilm/alacritty/issues/2017
+  - { key: Key1,    mods: alt,             chars: "\x1b1"           }
+  - { key: Key2,    mods: alt,             chars: "\x1b2"           }
+  - { key: Key3,    mods: alt,             chars: "\x1b3"           }
+  - { key: Key4,    mods: alt,             chars: "\x1b4"           }
+  - { key: Key5,    mods: alt,             chars: "\x1b5"           }
+  - { key: Key6,    mods: alt,             chars: "\x1b6"           }
+  - { key: Key7,    mods: alt,             chars: "\x1b7"           }
+  - { key: Key8,    mods: alt,             chars: "\x1b8"           }
+  - { key: Key9,    mods: alt,             chars: "\x1b9"           }
+  - { key: Key0,    mods: alt,             chars: "\x1b0"           }
+  - { key: H,       mods: alt,             chars: "\x1bh"           }
+  - { key: J,       mods: alt,             chars: "\x1bj"           }
+  - { key: K,       mods: alt,             chars: "\x1bk"           }
+  - { key: L,       mods: alt,             chars: "\x1bl"           }
 
   #- { key: Paste,                    action: Paste                            }
   #- { key: Copy,                     action: Copy                             }

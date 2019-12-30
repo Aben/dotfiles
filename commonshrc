@@ -7,11 +7,6 @@ HISTSIZE=10000
 
 source ~/.commonenv
 
-alias l=ls
-alias ls='ls --group-directories-first -F --color=auto'
-alias ll='ls -oh'
-alias la='ls -A'
-
 alias grep='grep --color=auto -E -i'
 alias lstcp='lsof -nPi tcp'
 alias mkdir='mkdir -p'
@@ -22,8 +17,8 @@ alias g=git
 alias gl='git l'
 alias gll='git ll'
 alias gs='git s'
-alias o=xdg-open
 alias ht="htop -u \$USER -s PERCENT_CPU"
+alias k="kubectl"
 alias s='sudo -E '
 alias sctl='systemctl'
 alias scu='systemctl --user'
@@ -33,7 +28,7 @@ alias rg='rg -LSp'
 alias rgnotes='rg -w "BUG|COMBAK|FIX|TBD|TODO|WTF|XXX" | less'
 alias bss="browser-sync start --server --directory --files='*.css, *.html, *.js'"
 alias bsc="browser-sync start --config bs-config.js"
-alias cp='cp --reflink=auto'
+# alias cp='cp --reflink=auto'
 alias cm=mocp
 alias alert="echo -n '\a'"
 alias vg=vagrant
@@ -50,6 +45,24 @@ alias ntwr='networkctl reconfigure'
 alias downspeed='curl -o /dev/null'
 alias ping='ping -n'
 alias gp=gpaste-client
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  alias l=ls
+  alias ls='ls --group-directories-first -F --color=auto'
+  alias o=xdg-open
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  if ! type gls > /dev/null; then
+    alias l=ls
+    alias ls="ls -FG"
+  else
+    alias l=gls
+    alias ls='gls --group-directories-first -F --color=auto'
+  fi
+  alias o=open
+  alias typora="open -a Typora.app"
+fi
+alias ll="ls -oh"
+alias la='ls -A'
 
 mkd() {
   mkdir -p "$1"

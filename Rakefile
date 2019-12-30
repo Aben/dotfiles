@@ -79,11 +79,12 @@ NODE_PKGS = %w[
   eslint-import-resolver-babel-plugin-root-import
   import-js
   javascript-typescript-langserver
+  typescript-language-server
   neovim
 ]
 desc "Install essential NodeJS packages"
 task :npm do
-  sh(*%w[npm i -g yarn])
+  # sh(*%w[npm i -g yarn])
   sh(*(%w[yarn global add].concat(NODE_PKGS)))
 end
 

@@ -20,5 +20,3 @@ debian/*.EX
 
 *.pyc
 *.pyo
-
-.env

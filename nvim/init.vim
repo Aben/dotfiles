@@ -42,6 +42,8 @@ call minpac#add('5long/sw-makers')
 " Don't trust random shell script from the Internet
 " call minpac#add('autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': './install.sh' })
 call minpac#add('autozimu/LanguageClient-neovim', { 'branch': 'next' })
+call minpac#add('mattn/emmet-vim')
+call minpac#add('mattn/vim-findroot')
 
 " Filetype-specific
 call minpac#add('sheerun/vim-polyglot')
@@ -53,6 +55,8 @@ call minpac#add('Galooshi/vim-import-js')
 " Not used that much, might be deleted / re-learnt
 call minpac#add('tpope/vim-projectionist')
 
+" Load FZF from homebrew installation
+set runtimepath+=/usr/local/opt/fzf
 runtime macros/matchit.vim
 
 set exrc
@@ -90,6 +94,15 @@ let g:lightline = {
 hi link SneakPluginTarget Search
 hi link SneakStreakTarget Search
 
+if has("gui_running")
+  set antialias
+  set macmeta
+  set guifont=Go\ Mono:h14
+  set guifontwide=PingFang\ SC\ Light:h14
+  set linespace=2
+endif
+
+syntax on
 if has('nvim')
   set termguicolors
 endif
@@ -148,6 +161,7 @@ cnoremap <c-k> <c-\>eCmdlineKillTillEnd()<cr>
 cnoremap %% <c-r>=expand('%:h').'/'<CR>
 cnoremap <c-v>b <c-r>=expand('%:r')<CR>
 
+set laststatus=2
 set cmdheight=2
 set showcmd
 set wildmode=longest:full,full
@@ -155,6 +169,7 @@ set wildignorecase
 set completeopt=menu,preview,longest
 set shortmess+=aI
 set noshowmode
+set signcolumn=yes
 
 let s:home = resolve($HOME)
 function! CurDir()
@@ -263,7 +278,7 @@ command! -bang -nargs=* Rg
 
 
 nmap <c-s> <Plug>Ysurround
-xmap s <Plug>VSurround
+xmap <c-s> <Plug>VSurround
 imap <c-s> <Plug>ISurround
 
 nnoremap <expr> j v:count ? 'j' : 'gj'
@@ -284,6 +299,8 @@ inoremap <c-a> <c-g>U<c-o>I
 let g:sneak#use_ic_scs = 1
 nmap <space> <Plug>Sneak_s
 nmap <m-space> <Plug>Sneak_S
+xmap <space> <Plug>Sneak_s
+xmap <m-space> <Plug>Sneak_S
 
 nmap <F1> <nop>
 nmap Q <nop>
@@ -336,7 +353,7 @@ let g:neomake_python_enabled_makers = ['pyflakes']
 let g:neomake_python_pyflakes_maker_exe = 'pyflakes-python2'
 let g:neomake_javascript_eslint_maker = {
       \ 'exe': 'npx',
-      \ 'args': ['eslint', '-f', 'compact', '-c', s:home . '/.eslintrc.yaml'],
+      \ 'args': ['eslint', '-f', 'compact'],
       \ 'process_output': function('sw_makers#eslint#ProcessOutput')
       \ }
 let g:neomake_javascript_enabled_makers = ['eslint']
@@ -360,11 +377,29 @@ let g:UltiSnipsJumpForwardTrigger='<tab>'
 let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
 
 " LanguageClient
+" javascript-typescript-stdio
+" typescript-language-server --stdio
 let g:LanguageClient_serverCommands = {
+  \ 'c': ['ccls'],
+  \ 'cpp': ['ccls'],
+  \ 'objc': ['ccls'],
   \ 'rust': ['rls'],
-  \ 'javascript': ['javascript-typescript-stdio'],
+  \ 'javascript': ['typescript-language-server', '--stdio'],
+  \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
+  \ 'javascriptreact': ['typescript-language-server', '--stdio'],
+  \ 'typescript': ['typescript-language-server', '--stdio'],
+  \ 'typescript.txs': ['typescript-language-server', '--stdio'],
   \ 'python': ['pyls'],
+  \ 'go': ['gopls'],
+  \ 'vue': ['vls'],
+  \ 'sh': ['bash-language-server', 'start']
   \ }
+
+" other root markers....
+let g:LanguageClient_rootMarkers = {
+  \ 'typescript': ['tsconfig.json'],
+  \ }
+
 let g:LanguageClient_diagnosticsSignsMax = 0
 set completefunc=LanguageClient#complete
 " Steal mappings from natebosch/vim-lsc
@@ -374,9 +409,25 @@ nnoremap gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
 nnoremap gR LanguageClient#textDocument_references()
 
+" Run gofmt on save
+autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+
+" findroot
+" allow changing directory that goes up from sub-directory
+let g:findroot_not_for_subdir = 0
+
 " Since I'm a plugin author now
 nnoremap <leader>so :source %<CR>
 let g:nvimrc = expand('<sfile>')
 nnoremap <leader>ev :e <c-r>=g:nvimrc<CR><CR>
+
+if has('macunix')
+  " let g:imtoggle_commands = {
+  "     \ 'activate': 'im-select-osx im.rime.inputmethod.Squirrel.Rime',
+  "     \ 'deactivate': 'im-select-osx com.apple.keylayout.ABC',
+  "     \ }
+  " im-select-osx does not work well with Squirrel, workaround
+   autocmd vimrc InsertLeave * call jobstart('im-select-osx com.apple.keylayout.ABC')
+endif
 
 command! CN IMEnable
